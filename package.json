@@ -20,6 +20,7 @@
   "homepage": "https://github.com/e-mandy/mutlicase-auth#readme",
   "devDependencies": {
     "@types/bcrypt": "^6.0.0",
+    "@types/jsonwebtoken": "^9.0.10",
     "@types/node": "^25.0.8",
     "prisma": "^7.2.0",
     "ts-node": "^10.9.2"
@@ -27,7 +28,10 @@
   "dependencies": {
     "@prisma/adapter-mariadb": "^7.2.0",
     "@prisma/client": "^7.2.0",
+    "@types/dotenv": "^6.1.1",
     "bcrypt": "^6.0.0",
-    "dotenv": "^17.2.3"
+    "dotenv": "^17.2.3",
+    "dotenv-ts": "^0.2.1",
+    "jsonwebtoken": "^9.0.3"
   }
 }
