@@ -6,4 +6,6 @@ export interface IUserRepositories {
     findByEmail: (email: string) => Promise<UserEntity | null>,
     create: (user: createUserDto) => Promise<UserEntity>,
     saveRefreshToken: (userId: string, token: string, expiresAt: Date) => Promise<void>
+    revokeRefreshToken: (token: string, userId: string) => Promise<void>
+    blacklistAccessToken: (token: string) => Promise<void>
 }

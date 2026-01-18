@@ -2,9 +2,10 @@ import type { createUserDto } from "../../domain/dtos/createUserDto.js";
 import type { UserEntity } from "../../domain/entities/user.js";
 import type { IUserRepositories } from "../../domain/repositories/UserRepositories.js";
 import { prisma } from "../database/prisma.js";
+import jwt from 'jsonwebtoken';
 
 export class PrismaUserRepository implements IUserRepositories{
-    
+
     async findByEmail(email: string): Promise<UserEntity | null>{
         const user = await prisma.user.findUnique({
             where: { email: email }
@@ -30,4 +31,27 @@ export class PrismaUserRepository implements IUserRepositories{
             }
         });
     };
+
+    async revokeRefreshToken(token: string, userId: string){
+        await prisma.refreshToken.update({
+            where: {
+                token: token,
+                userId: userId
+            },
+            data: {
+                revokedAt: new Date()
+            }
+        });
+    }
+
+    async blacklistAccessToken(token: string){
+        // Pour récupérer la date d'expiration du token
+        const tokenExpiration = jwt.decode(token) as { exp: number };
+        await prisma.blacklistedAccessToken.create({
+            data: {
+                jti: token,
+                expiresAt: new Date(tokenExpiration.exp * 1000)
+            }
+        });
+    }
 }

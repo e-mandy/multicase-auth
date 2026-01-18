@@ -5,6 +5,16 @@ import dotenv from 'dotenv-ts';
 dotenv.config();
 
 class JwtTokenService implements ITokenService{
+    private access_secret: string;
+    private refresh_secret: string;
+
+    constructor(){
+        if(!process.env.ACCESS_KEY_SECRET) throw new Error("SECRET KEY MISSED: ACCESS_KEY");
+        if(!process.env.REFRESH_KEY_SECRET) throw new Error("SECRET KEY MISSED: REFRESH_KEY");
+
+        this.access_secret = process.env.ACCESS_KEY_SECRET;
+        this.refresh_secret = process.env.REFRESH_KEY_SECRET
+    }
 
     generateAccessToken(payload: { userId: string }){
         const access_key = process.env.ACCESS_KEY_SECRET;
@@ -24,7 +34,19 @@ class JwtTokenService implements ITokenService{
         return token;
     }
 
-    verifyToken(token: string){
-        return 0;
+    verifyAccessToken(token: string){
+        try{
+            return jwt.verify(token, this.access_secret) as { userId: string };
+        }catch(error){
+            return null;
+        }
     }
+
+    verifyRefreshToken(token: string){
+        try{
+            return jwt.verify(token, this.refresh_secret) as { userId: string };
+        }catch(error){
+            return null;
+        }
+    };
 }

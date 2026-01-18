@@ -1,5 +1,6 @@
 export interface ITokenService {
     generateAccessToken: (payload: { userId: string }) => string,
     generateRefreshToken: (payload: { userId: string }) => string,
-    verifyToken: (token: string) => any
+    verifyAccessToken: (token: string) => { userId: string } | null
+    verifyRefreshToken: (token: string) => { userId: string} | null
 }
