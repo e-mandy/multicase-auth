@@ -4,7 +4,7 @@ import dotenv from 'dotenv-ts';
 
 dotenv.config();
 
-class JwtTokenService implements ITokenService{
+export class JwtTokenService implements ITokenService{
     private access_secret: string;
     private refresh_secret: string;
 
