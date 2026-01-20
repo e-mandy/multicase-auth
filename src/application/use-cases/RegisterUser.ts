@@ -16,8 +16,7 @@ export class RegisterUser{
     async execute(data: createUserDto): Promise<{ user: UserEntity, access_token: string, refresh_token: string }>{
         const existUser = await this.userRepository.findByEmail(data.email);
 
-        console.log("je passe ?")
-        if(!existUser){
+        if(existUser){
             throw new Error("USER_ALREADY_EXISTS");
         }
         let hashedPassword: string | null = null;

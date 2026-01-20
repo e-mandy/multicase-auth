@@ -21,7 +21,7 @@ export class PrismaUserRepository implements IUserRepositories{
 
         return newUser;
     };
-
+    
     async saveRefreshToken(userId: string, token: string, expiresAt: Date){
         await prisma.refreshToken.create({
             data: {

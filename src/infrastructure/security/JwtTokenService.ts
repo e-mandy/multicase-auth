@@ -30,7 +30,10 @@ export class JwtTokenService implements ITokenService{
         let token = "";
         if(refresh_key){
             token = jwt.sign(payload, refresh_key, { expiresIn: "7d" });
+        }else{
+            throw new Error("Server Error");
         }
+        
         return token;
     }
 

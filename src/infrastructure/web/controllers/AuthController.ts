@@ -17,7 +17,7 @@ export class AuthController {
             let credentials = req.body as createUserDto;
             const result = await this.registerUseCase.execute(credentials);
             console.log(result);
-            return res.status(401).json(result);
+            return res.status(200).json(result);
 
         }catch(error: any){
             if(error.name == "BAD CREDENTIALS") return res.status(400).json({
