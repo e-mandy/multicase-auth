@@ -1,7 +1,9 @@
 import type { LoginUser } from "../../../application/use-cases/LoginUser.ts";
 import type { RegisterUser } from "../../../application/use-cases/RegisterUser.ts";
 import type { createUserDto } from "../../../domain/dtos/createUserDto.ts";
-import type { Response, Request } from 'express';
+import type { Response, Request, NextFunction } from 'express';
+import { AppError } from "../../../domain/exceptions/AppError.ts";
+import { registerSchema } from "../validators/authValidator.ts";
 
 export class AuthController {
     private loginUseCase: LoginUser;
@@ -12,24 +14,17 @@ export class AuthController {
         this.registerUseCase = registerUseCase;
     }
 
-    register = async (req: Request, res: Response) => {
+    register = async (req: Request, res: Response, next: NextFunction) => {
+        if(!req.body) throw new AppError("INVALID CREDENTIALS", 400);
+        
         try{
+            registerSchema.parse(req.body);
             let credentials = req.body as createUserDto;
             const result = await this.registerUseCase.execute(credentials);
             return res.status(200).json(result);
 
         }catch(error: any){
-            if(error.name == "BAD CREDENTIALS") return res.status(400).json({
-                message: "Invalid credentials"
-            })
-
-            if(error.name == 'USER_ALREADY_EXISTS') return res.status(409).json({
-                message: error.message
-            });
-
-            return res.status(500).json({
-                message: error.message
-            });
+            next(error);
         }
     };
 

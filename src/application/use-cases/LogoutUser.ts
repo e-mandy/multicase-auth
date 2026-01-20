@@ -1,13 +1,13 @@
 import type { IUserRepositories } from "../../domain/repositories/UserRepositories.js";
 
-export class Logout {
+export class LogoutUser {
     private repository: IUserRepositories;
 
     constructor(repository: IUserRepositories){
         this.repository = repository;
     }
     
-    execute(access_token: string, refresh_token: string){
-        //
+    async execute(refresh_token: string){
+        await this.repository.revokeRefreshToken(refresh_token);
     }
 }

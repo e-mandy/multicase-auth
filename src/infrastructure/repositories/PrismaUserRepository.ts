@@ -32,11 +32,10 @@ export class PrismaUserRepository implements IUserRepositories{
         });
     };
 
-    async revokeRefreshToken(token: string, userId: string){
+    async revokeRefreshToken(token: string){
         await prisma.refreshToken.update({
             where: {
                 token: token,
-                userId: userId
             },
             data: {
                 revokedAt: new Date()
