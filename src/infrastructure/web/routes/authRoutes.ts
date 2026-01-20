@@ -6,13 +6,15 @@ import { PrismaUserRepository } from '../../repositories/PrismaUserRepository.ts
 import { JwtTokenService } from '../../security/JwtTokenService.ts';
 import { authMiddleware } from '../middleware/authMiddleware.ts';
 import type { Response, Request } from 'express';
+import { NodeMailerService } from '../../services/NodeMailService.ts';
 
 const router = express.Router();
 
 const tokenService = new JwtTokenService();
 const userRepository = new PrismaUserRepository();
+const nodeMailer = new NodeMailerService();
 const loginUseCase = new LoginUser(userRepository, tokenService);
-const registerUseCase = new RegisterUser(userRepository, tokenService);
+const registerUseCase = new RegisterUser(userRepository, tokenService, nodeMailer);
 const auth = new AuthController(loginUseCase, registerUseCase);
 
 

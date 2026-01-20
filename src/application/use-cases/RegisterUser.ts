@@ -3,14 +3,17 @@ import type { UserEntity } from "../../domain/entities/user.js";
 import type { IUserRepositories } from "../../domain/repositories/UserRepositories.js";
 import bcrypt from 'bcrypt';
 import type { ITokenService } from "../../domain/security/ITokenService.js";
+import type { IMailerService } from "../../domain/services/IMailerService.ts";
 
 export class RegisterUser{
     private userRepository: IUserRepositories;
     private tokenService: ITokenService;
+    private mailService: IMailerService;
 
-    constructor(repository: IUserRepositories, tokenService: ITokenService){
+    constructor(repository: IUserRepositories, tokenService: ITokenService, mailService: IMailerService){
         this.userRepository = repository;
         this.tokenService = tokenService;
+        this.mailService = mailService;
     }
     
     async execute(data: createUserDto): Promise<{ user: UserEntity, access_token: string, refresh_token: string }>{
@@ -31,6 +34,8 @@ export class RegisterUser{
             email: data.email,
             password: hashedPassword
         });
+
+        this.mailService.sendVerificationEmail(newUser.email, "");
 
         const access_token = this.tokenService.generateAccessToken({ userId: newUser.id });
         const refresh_token = this.tokenService.generateRefreshToken({ userId: newUser.id });
