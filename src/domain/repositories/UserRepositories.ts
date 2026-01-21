@@ -12,4 +12,5 @@ export interface IUserRepositories {
     findVerificationToken: (token: string) => Promise<VerificationToken| null>
     activateUser: (id: string) => Promise<void>
     deleteVerificationToken: (token: string) => Promise<void>
+    resetPassword: (id: string, hashedPassword: string) => Promise<void>
 }
