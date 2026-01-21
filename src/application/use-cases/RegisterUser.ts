@@ -20,7 +20,8 @@ export class RegisterUser{
         const existUser = await this.userRepository.findByEmail(data.email);
 
         if(existUser){
-            throw new Error("USER_ALREADY_EXISTS");
+            console.log("User already exists");
+            throw new Error("INVALID CREDENTIALS");
         }
         let hashedPassword: string | null = null;
         if(data.password){

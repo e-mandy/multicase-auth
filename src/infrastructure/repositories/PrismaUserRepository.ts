@@ -83,14 +83,22 @@ export class PrismaUserRepository implements IUserRepositories{
         });
     }
 
-    async resetPassword(id: string, hashedPassword: string){
+    async updatePassword(email: string, hashedPassword: string){
         await prisma.user.update({
             where: {
-                id: id
+                id: email
             },
             data: {
                 password: hashedPassword
             }
         });
     };
+
+    async removePasswordResetToken(userId: string){
+        await prisma.passwordResetToken.delete({
+            where: {
+                userId: userId
+            }
+        });
+    }
 }
