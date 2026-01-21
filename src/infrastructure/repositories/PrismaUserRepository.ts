@@ -57,14 +57,11 @@ export class PrismaUserRepository implements IUserRepositories{
     async findVerificationToken(token: string){
         const result = await prisma.verificationToken.findUnique({
             where: {
-                token: token
+                token: token,
             },
-            select: {
-                token: true
-            }
         });
 
-        return result ? result.token : null;
+        return result;
     }
 
     async activateUser(id: string){
