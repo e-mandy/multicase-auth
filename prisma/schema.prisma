@@ -26,7 +26,7 @@ model User {
   oAuthAccount OAuthAccount[]
   loginHistory LoginHistory[]
   verificationToken VerificationToken[]
-  passwordResetToken PasswordResetToken[]
+  passwordResetToken PasswordResetToken?
 }
 
 model RefreshToken{

@@ -17,5 +17,7 @@ export class ResetToken{
         const hashedPassword = await bcrypt.hash(password, salt);
 
         await this.userRepository.updatePassword(user.email, hashedPassword);
+
+        await this.userRepository.removePasswordResetToken(user.id);
     }
 }

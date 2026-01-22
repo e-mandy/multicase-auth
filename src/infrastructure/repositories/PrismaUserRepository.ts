@@ -94,10 +94,10 @@ export class PrismaUserRepository implements IUserRepositories{
         });
     };
 
-    async removePasswordResetToken(userId: string){
-        await prisma.passwordResetToken.delete({
+    async removePasswordResetToken(id: string){
+        await prisma.passwordResetToken.deleteMany({
             where: {
-                userId: userId
+                userId: id
             }
         });
     }
