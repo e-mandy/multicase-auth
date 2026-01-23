@@ -147,9 +147,23 @@ export class PrismaUserRepository implements IUserRepositories{
 
     async cleanupExpiredTokens(){
         const now = new Date();
+
+        // Suppresion des access token blacklistée qui ont expiré.
         await prisma.blacklistedAccessToken.deleteMany({
             where: {
                 expiresAt: { lt: now }
+            }
+        });
+
+        // Suppression des refresh token expirés ou révoqués.
+        await prisma.refreshToken.deleteMany({
+            where: {
+                OR: [
+                    {
+                        expiresAt: { lt: now },
+                        revokedAt: { not: null }
+                    }
+                ]
             }
         });
     }
