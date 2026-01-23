@@ -15,4 +15,6 @@ export interface IUserRepositories {
     findTokenResetPassword: (token: string) => Promise<PasswordResetToken | null>
     updatePassword: (id: string, hashedPassword: string) => Promise<void>
     removePasswordResetToken: (userId: string) => Promise<void>
+    findUserByOAuth: (provider: string, providerId: string) => Promise<UserEntity | null>
+    linkOAuthAccount: (userId: string, data: any) => Promise<void>
 }

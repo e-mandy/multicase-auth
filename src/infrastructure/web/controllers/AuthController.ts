@@ -9,7 +9,7 @@ export class AuthController {
     private loginUseCase: LoginUser;
     private registerUseCase: RegisterUser;
 
-    constructor(loginUseCase: LoginUser, registerUseCase: RegisterUser){
+    constructor(loginUseCase: LoginUser, registerUseCase: RegisterUser, ){
         this.loginUseCase = loginUseCase;
         this.registerUseCase = registerUseCase;
     }
@@ -49,4 +49,8 @@ export class AuthController {
             })
         }
     };
+
+    emailVerify = async (req: Request, res: Response) => {
+        //
+    }
 }

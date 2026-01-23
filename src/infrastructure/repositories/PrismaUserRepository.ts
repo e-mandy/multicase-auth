@@ -109,4 +109,12 @@ export class PrismaUserRepository implements IUserRepositories{
             }
         });
     }
+
+    async linkOAuthAccount(userId: string, data: any){
+
+    }
+
+    async findUserByOAuth(provider: string, providerId: string){
+        return null;
+    }
 }

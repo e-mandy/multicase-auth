@@ -19,5 +19,7 @@ export class ResetPassword{
         await this.userRepository.updatePassword(user.email, hashedPassword);
 
         await this.userRepository.removePasswordResetToken(user.id);
+        
+        // Ajouter la révocation de toutes les sessions de l'utilisateur.
     }
 }
