@@ -5,16 +5,25 @@ import type { Response, Request, NextFunction } from 'express';
 import { AppError } from "../../../domain/exceptions/AppError.ts";
 import { registerSchema } from "../validators/authValidator.ts";
 import type { EmailVerify } from "../../../application/use-cases/EmailVerify.ts";
+import type { LogoutUser } from "../../../application/use-cases/LogoutUser.ts";
 
 export class AuthController {
     private loginUseCase: LoginUser;
     private registerUseCase: RegisterUser;
     private emailVerifyUseCase: EmailVerify;
+    private logoutUseCase: LogoutUser;
 
-    constructor(loginUseCase: LoginUser, registerUseCase: RegisterUser, emailVerifyUseCase: EmailVerify){
+    constructor(
+        loginUseCase: LoginUser, 
+        registerUseCase: RegisterUser, 
+        emailVerifyUseCase: EmailVerify,
+        logoutUseCase: LogoutUser
+    )
+    {
         this.loginUseCase = loginUseCase;
         this.registerUseCase = registerUseCase;
         this.emailVerifyUseCase = emailVerifyUseCase;
+        this.logoutUseCase = logoutUseCase
     }
 
     register = async (req: Request, res: Response, next: NextFunction) => {
@@ -54,6 +63,22 @@ export class AuthController {
             if(error.name == 'INVALID CREDENTIALS') return res.status(401).json({
                 message: "Invalid credentials"
             })
+        }
+    };
+
+    logout = (req: Request, res: Response, next: NextFunction) => {
+        const refresh_token = req.cookies.refreshToken;
+        const access_token = req.headers.authorization;
+
+        if(!refresh_token || !access_token) throw new AppError('INVALID TOKEN', 401);
+        try{
+            const result = this.logoutUseCase.execute(refresh_token, access_token);
+            return res.json({
+                code: 200,
+                message: "User logged out successfully"
+            })
+        }catch(error){
+            next(error)
         }
     };
 

@@ -16,8 +16,8 @@ export class Confirm2FA{
         const userSecret = await this.userRepository.findSecretByUserId(userId);
         if(!userSecret) throw new AppError('TWO FACTOR AUTHENTICATION NOT SET UP.', 500);
 
-        const result = this.otpService.verifyOTPCode(otpCode, userSecret);
-        if(!result) throw new AppError('2FA CODE INVALID', 400);
+        const isValid = this.otpService.verifyOTPCode(otpCode, userSecret);
+        if(!isValid) throw new AppError('2FA CODE INVALID', 400);
 
         await this.userRepository.activateUser2FA(userId);
 
