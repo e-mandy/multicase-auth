@@ -88,7 +88,14 @@ export class AuthController {
         if(!token) throw new AppError('INVALID TOKEN', 400);
         
         try{
-            this.emailVerifyUseCase.execute(token);
+            const result = this.emailVerifyUseCase.execute(token);
+
+            return res.status(200).json({
+                code: 200,
+                data: {
+                    ...result
+                }
+            });
         }catch(error){
             next(error);
         }

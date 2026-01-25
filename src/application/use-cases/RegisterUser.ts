@@ -7,16 +7,14 @@ import type { IMailerService } from "../../domain/services/IMailerService.ts";
 
 export class RegisterUser{
     private userRepository: IUserRepositories;
-    private tokenService: ITokenService;
     private mailService: IMailerService;
 
-    constructor(repository: IUserRepositories, tokenService: ITokenService, mailService: IMailerService){
+    constructor(repository: IUserRepositories, mailService: IMailerService){
         this.userRepository = repository;
-        this.tokenService = tokenService;
         this.mailService = mailService;
     }
     
-    async execute(data: createUserDto): Promise<{ user: UserEntity, access_token: string, refresh_token: string }>{
+    async execute(data: createUserDto): Promise<{ user: UserEntity }>{
         const existUser = await this.userRepository.findByEmail(data.email);
 
         if(existUser){
@@ -37,18 +35,10 @@ export class RegisterUser{
         });
 
         
-
         this.mailService.sendVerificationEmail(newUser.email, "");
-
-        const access_token = this.tokenService.generateAccessToken({ userId: newUser.id });
-        const refresh_token = this.tokenService.generateRefreshToken({ userId: newUser.id });
-
-        await this.userRepository.saveRefreshToken(newUser.id, refresh_token, new Date(Date.now() + (1000 * 7 * 24 * 60 * 60)));
 
         return {
             user: newUser,
-            access_token,
-            refresh_token
         }
     }
 }
