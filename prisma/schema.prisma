@@ -19,6 +19,7 @@ model User {
   password String?
   emailVerifiedAt DateTime?
   twoFactorEnabledAt DateTime?
+  twoFactorSecret String?
   disabledAt DateTime?
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt

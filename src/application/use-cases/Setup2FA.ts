@@ -1,3 +1,4 @@
+import { AppError } from "../../domain/exceptions/AppError.ts";
 import type { IUserRepositories } from "../../domain/repositories/UserRepositories.ts";
 import speakeasy from 'speakeasy';
 
@@ -9,6 +10,9 @@ export class Setup2FA{
     }
 
     async execute(email: string){
+        const user = await this.userRepository.findByEmail(email);
+        if(!user) throw new AppError('INVALID CREDENTIALS', 400);
+
         const is2FAActive = await this.userRepository.verify2FAActivate(email);
         if(is2FAActive) return ;
 
@@ -17,7 +21,7 @@ export class Setup2FA{
             name: `MonApp:${email}`,
             issuer: "MonApp" 
         });
-        await this.userRepository.save2FASecret(newSecret.base32);
+        await this.userRepository.save2FASecret(newSecret.base32, user.id);
 
         return newSecret.otpauth_url;
     }

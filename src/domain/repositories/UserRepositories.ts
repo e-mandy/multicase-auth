@@ -18,8 +18,8 @@ export interface IUserRepositories {
     removePasswordResetToken: (userId: string) => Promise<void>
     findUserByOAuth: (provider: string, providerId: string) => Promise<OAuthAccount | null>
     linkOAuthAccount: (userId: string, data: any) => Promise<void>
-    verify2FAActivate: (email: string) => Promise<boolean>
-    save2FASecret: (secret: string) => Promise<void>
+    verify2FAActivate: (email: string) => Promise<boolean | null>
+    save2FASecret: (secret: string, userId: string) => Promise<void>
     findSecretByUserId: (userId: string) => Promise<String | null>
     activateUser2FA: (userId: string) => Promise<void>
     saveLoginAttempt: (datas: {

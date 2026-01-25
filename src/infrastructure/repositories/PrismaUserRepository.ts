@@ -127,15 +127,38 @@ export class PrismaUserRepository implements IUserRepositories{
     }
 
     async findUserByOAuth(provider: string, providerId: string){
-        return null;
+        return await prisma.oAuthAccount.findUnique({
+            where: {
+                provider_providerId: {
+                    provider: provider,
+                    providerId: providerId
+                }
+            }
+        });
     }
 
     async verify2FAActivate(email: string){
-        return true;
+        let isActive = null;
+        isActive =  prisma.user.findUnique({
+            where: {
+                email: email
+            },
+            select: {
+                twoFactorEnabledAt: true
+            }
+        });
+        return (isActive === null) ? null : true;
     }
 
-    async save2FASecret(secret: string){
-        return ;
+    async save2FASecret(secret: string, userId: string){
+        await prisma.user.update({
+            where: {
+                id: userId
+            },
+            data: {
+                twoFactorSecret: secret
+            }
+        });
     }
 
     async activateUser2FA(userId: string){
