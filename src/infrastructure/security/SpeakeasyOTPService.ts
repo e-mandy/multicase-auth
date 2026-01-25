@@ -1,3 +1,4 @@
+import { AppError } from "../../domain/exceptions/AppError.ts";
 import type { IOTPService } from "../../domain/security/IOTPService.ts";
 import speakeasy from 'speakeasy';
 
@@ -9,7 +10,10 @@ export class SpeakeasyOTPService implements IOTPService{
             issuer: "MulticaseAuth"
         });
 
-        return secret.base32;
+        const qrcode = secret.otpauth_url;
+        if(!qrcode) throw new AppError('QRCODE TRANSFORMATION FAILED', 500);
+        
+        return { secret: secret.base32, qrcode: qrcode };
     }
 
     verifyOTPCode(otp_code: string, secret: string){

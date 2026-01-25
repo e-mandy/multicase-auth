@@ -1,12 +1,15 @@
 import { AppError } from "../../domain/exceptions/AppError.ts";
 import type { IUserRepositories } from "../../domain/repositories/UserRepositories.ts";
 import speakeasy from 'speakeasy';
+import type { IOTPService } from "../../domain/security/IOTPService.ts";
 
 export class Setup2FA{
     private userRepository: IUserRepositories;
+    private otpService: IOTPService;
 
-    constructor(repository: IUserRepositories){
+    constructor(repository: IUserRepositories, otpServices: IOTPService){
         this.userRepository = repository;
+        this.otpService = otpServices;
     }
 
     async execute(email: string){
@@ -16,13 +19,9 @@ export class Setup2FA{
         const is2FAActive = await this.userRepository.verify2FAActivate(email);
         if(is2FAActive) return ;
 
-        const newSecret = speakeasy.generateSecret({
-            length: 20,
-            name: `MonApp:${email}`,
-            issuer: "MonApp" 
-        });
-        await this.userRepository.save2FASecret(newSecret.base32, user.id);
+        const secretDatas = this.otpService.generateSecret(email);
+        await this.userRepository.save2FASecret(secretDatas.secret, user.id);
 
-        return newSecret.otpauth_url;
+        return secretDatas.qrcode;
     }
 }
