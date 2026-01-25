@@ -2,7 +2,7 @@ import { AppError } from "../../domain/exceptions/AppError.ts";
 import type { IUserRepositories } from "../../domain/repositories/UserRepositories.ts";
 import speakeasy from 'speakeasy';
 
-class Confirm2FA{
+export class Confirm2FA{
     private userRepository: IUserRepositories;
 
     constructor(repository: IUserRepositories){
@@ -11,7 +11,7 @@ class Confirm2FA{
     
     async execute(userId: string, otpCode: string){
         const userSecret = await this.userRepository.findSecretByUserId(userId);
-        if(!userSecret) throw new AppError('USER SECRET OTP NOT FOUND', 500);
+        if(!userSecret) throw new AppError('TWO FACTOR AUTHENTICATION NOT SET UP.', 500);
 
         const result = speakeasy.totp.verify({ secret: String(userSecret), encoding: 'base32', token: otpCode })
         if(!result) throw new AppError('2FA CODE INVALID', 400);

@@ -123,7 +123,7 @@ export class PrismaUserRepository implements IUserRepositories{
     }
 
     async linkOAuthAccount(userId: string, data: any){
-
+        //
     }
 
     async findUserByOAuth(provider: string, providerId: string){
@@ -162,11 +162,27 @@ export class PrismaUserRepository implements IUserRepositories{
     }
 
     async activateUser2FA(userId: string){
-        return ;
+        await prisma.user.update({
+            where: {
+                id: userId
+            },
+            data: {
+                twoFactorEnabledAt: new Date()
+            }
+        });
     }
 
     async findSecretByUserId(userId: string){
-        return "";
+        const result = await prisma.user.findUnique({
+            where: {
+                id: userId
+            },
+            select: {
+                twoFactorSecret: true
+            }
+        });
+
+        return (!result) ? null : result.twoFactorSecret;
     }
 
     async saveLoginAttempt(datas: { userId?: string; email: string; ip: string; userAgent: string; status: "SUCCESS" | "FAILED"; }){
