@@ -131,10 +131,20 @@ export class AuthController {
 
     }
 
-    github = (req: Request, res: Response, next: NextFunction) => {
-        const params = this.githubRequestUseCase.execute();
+    githubRequest = (req: Request, res: Response, next: NextFunction) => {
+        try{
 
-        const queryString = new URLSearchParams(params).toString();
-        return res.redirect(`${this.github_url}?${queryString}`);
+            const params = this.githubRequestUseCase.execute();
+            const queryString = new URLSearchParams(params).toString();
+            return res.redirect(`${this.github_url}?${queryString}`);
+
+        }catch(error){
+            next(error);
+        }
+
+    }
+
+    githubCallback = (req: Request, res: Response) => {
+        const code = req.query.code as string;
     }
 }
