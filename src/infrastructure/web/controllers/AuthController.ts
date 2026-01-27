@@ -7,6 +7,7 @@ import { registerSchema } from "../validators/authValidator.ts";
 import type { EmailVerify } from "../../../application/use-cases/EmailVerify.ts";
 import type { LogoutUser } from "../../../application/use-cases/LogoutUser.ts";
 import type { CodeOTPVerify } from "../../../application/use-cases/CodeOTPVerify.ts";
+import type { GithubRequest } from "../../../application/use-cases/GithubRequest.ts";
 
 export class AuthController {
     private loginUseCase: LoginUser;
@@ -14,13 +15,16 @@ export class AuthController {
     private emailVerifyUseCase: EmailVerify;
     private logoutUseCase: LogoutUser;
     private codeOTPVerifyUseCase: CodeOTPVerify;
+    private githubRequestUseCase: GithubRequest;
+    private github_url = "https://github.com/login/oauth/authorize";
 
     constructor(
         loginUseCase: LoginUser, 
         registerUseCase: RegisterUser, 
         emailVerifyUseCase: EmailVerify,
         logoutUseCase: LogoutUser,
-        codeOTPVerifyUseCase: CodeOTPVerify
+        codeOTPVerifyUseCase: CodeOTPVerify,
+        githubRequest: GithubRequest
     )
     {
         this.loginUseCase = loginUseCase;
@@ -28,6 +32,7 @@ export class AuthController {
         this.emailVerifyUseCase = emailVerifyUseCase;
         this.logoutUseCase = logoutUseCase;
         this.codeOTPVerifyUseCase = codeOTPVerifyUseCase;
+        this.githubRequestUseCase = githubRequest
     }
 
     register = async (req: Request, res: Response, next: NextFunction) => {
@@ -93,7 +98,7 @@ export class AuthController {
     };
 
     emailVerify = async (req: Request, res: Response, next: NextFunction) => {
-        const token = req.params.token as string;
+        const token = req.query.token as string;
 
         if(!token) throw new AppError('INVALID TOKEN', 400);
         
@@ -124,5 +129,12 @@ export class AuthController {
             next(error);
         }
 
+    }
+
+    github = (req: Request, res: Response, next: NextFunction) => {
+        const params = this.githubRequestUseCase.execute();
+
+        const queryString = new URLSearchParams(params).toString();
+        return res.redirect(`${this.github_url}?${queryString}`);
     }
 }
