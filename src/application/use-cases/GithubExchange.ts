@@ -30,7 +30,7 @@ export class GithubExchange {
     
             const response = await axios.post(this.github_url_post, params.toString(), {
                 headers: {
-                    'Content-Type': "application/json"
+                    'Content-Type': "application/x-www-form-urlencoded"
                 }
             });
     
