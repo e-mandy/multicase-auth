@@ -13,6 +13,7 @@ import { GithubUserInfo } from "../../../application/use-cases/GithubUserInfo.ts
 import type { SocialLogin } from "../../../application/use-cases/SocialLogin.ts";
 import type { Setup2FA } from "../../../application/use-cases/Setup2FA.ts";
 import type { Confirm2FA } from "../../../application/use-cases/Confirm2FA.ts";
+import type { Desactivate2FA } from "../../../application/use-cases/Desactivate2FA.ts";
 
 export class AuthController {
     private loginUseCase: LoginUser;
@@ -24,6 +25,7 @@ export class AuthController {
     private socialLogin: SocialLogin;
     private setupTwoFactor: Setup2FA;
     private confirm2FA: Confirm2FA;
+    private desactivateTwoFactor: Desactivate2FA;
     private githubExchange: GithubExchange = new GithubExchange();
     private githubUserInfo: GithubUserInfo = new GithubUserInfo();
     private github_url = "https://github.com/login/oauth/authorize";
@@ -37,7 +39,8 @@ export class AuthController {
         githubRequest: GithubRequest,
         socialLogin: SocialLogin,
         setupTwoFactor: Setup2FA,
-        confirm2FA: Confirm2FA
+        confirm2FA: Confirm2FA,
+        desactivateTwoFactor: Desactivate2FA
     )
     {
         this.loginUseCase = loginUseCase;
@@ -47,8 +50,9 @@ export class AuthController {
         this.codeOTPVerifyUseCase = codeOTPVerifyUseCase;
         this.githubRequestUseCase = githubRequest;
         this.socialLogin = socialLogin;
-        this.setupTwoFactor = setupTwoFactor
-        this.confirm2FA = confirm2FA
+        this.setupTwoFactor = setupTwoFactor;
+        this.confirm2FA = confirm2FA;
+        this.desactivateTwoFactor = desactivateTwoFactor;
     }
 
     register = async (req: Request, res: Response, next: NextFunction) => {
@@ -160,6 +164,23 @@ export class AuthController {
             return res.status(200).json({
                 code: 200,
                 message: "2FA activated successfully"
+            })
+        }catch(error){
+            next(error);
+        }
+    }
+
+    desactivate2FA = async (req: Request, res: Response, next: NextFunction) => {
+        const { email, token } = req.body;
+
+        if(!email || !token) throw new AppError('EMAIL OR OTP NOT PROVIDED', 401);
+        try{
+            const result = await this.desactivateTwoFactor.execute(token, email);
+            if(result !== true) throw new AppError('TWO FACTOR DISABLED FAILED', 500);
+
+            return res.status(200).json({
+                code: 200,
+                message: "Two factor disabled successfully"
             })
         }catch(error){
             next(error);

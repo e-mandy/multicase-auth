@@ -23,6 +23,8 @@ export class Desactivate2FA{
             if(!isValidToken) throw new AppError('TOKEN NOT VALID', 401);
 
             await this.userRepository.desactivateUser2FA(user.id);
+
+            return true;
         }catch(error: any){
             throw new AppError(error.name, 500);
         }

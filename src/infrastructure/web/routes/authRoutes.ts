@@ -15,6 +15,7 @@ import { GithubRequest } from '../../../application/use-cases/GithubRequest.ts';
 import { SocialLogin } from '../../../application/use-cases/SocialLogin.ts';
 import { Setup2FA } from '../../../application/use-cases/Setup2FA.ts';
 import { Confirm2FA } from '../../../application/use-cases/Confirm2FA.ts';
+import { Desactivate2FA } from '../../../application/use-cases/Desactivate2FA.ts';
 
 const router = express.Router();
 
@@ -31,6 +32,7 @@ const githubRequestUseCase = new GithubRequest();
 const socialLogin = new SocialLogin(userRepository, tokenService);
 const setupTwoFactor = new Setup2FA(userRepository, speakeasyService);
 const confirm2FA = new Confirm2FA(userRepository, speakeasyService);
+const desactivate2FA = new Desactivate2FA(userRepository, speakeasyService);
 const auth = new AuthController(
     loginUseCase, 
     registerUseCase, 
@@ -40,7 +42,8 @@ const auth = new AuthController(
     githubRequestUseCase,
     socialLogin,
     setupTwoFactor,
-    confirm2FA
+    confirm2FA,
+    desactivate2FA
 );
 
 
