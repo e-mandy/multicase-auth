@@ -123,12 +123,17 @@ export class AuthController {
         if(!token) throw new AppError('INVALID TOKEN', 400);
         
         try{
-            const result = this.emailVerifyUseCase.execute(token);
+            const result = await this.emailVerifyUseCase.execute(token);
+            
+            res.cookie('refreshToken', result.refresh_token, {
+                httpOnly: true,
+                sameSite: 'lax'
+            });
 
             return res.status(200).json({
                 code: 200,
                 data: {
-                    ...result
+                    access_token: result.access_token
                 }
             });
         }catch(error){

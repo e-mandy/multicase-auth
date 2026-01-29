@@ -37,6 +37,7 @@ export class RegisterUser{
         });
 
         const token = this.tokenService.generateEmailToken({ email: data.email });
+        await this.userRepository.saveVerificationToken(token, newUser.id);
         this.mailService.sendVerificationEmail(newUser.email, token);
 
         return {
