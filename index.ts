@@ -3,6 +3,7 @@ import authRoutes from './src/infrastructure/web/routes/authRoutes.ts';
 import { errorMiddleware } from './src/infrastructure/web/middleware/errorMiddleware.ts';
 import cron from 'node-cron';
 import { PrismaUserRepository } from './src/infrastructure/repositories/PrismaUserRepository.ts';
+import { authMiddleware } from './src/infrastructure/web/middleware/authMiddleware.ts';
 
 const userRepository = new PrismaUserRepository();
 
