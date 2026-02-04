@@ -27,6 +27,3 @@ export class SpeakeasyOTPService implements IOTPService{
         });
     }
 }
-
-const test = new SpeakeasyOTPService();
-console.log(await test.generateSecret("test@gmail.com"));
