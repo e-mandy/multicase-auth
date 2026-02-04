@@ -4,7 +4,6 @@ import { AppError } from "../../../domain/exceptions/AppError.ts";
 
 export const authMiddleware = (tokenService: ITokenService) => {
     return (req: Request, res: Response, next: NextFunction) => {
-        console.log("Je suis ici au moins")
         const authorization = req.headers.authorization;
         
         if(!authorization || !authorization.startsWith('Bearer ')) throw new AppError("UNAUTHORIZED ACCESS", 400);

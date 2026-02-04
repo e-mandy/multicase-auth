@@ -163,7 +163,6 @@ export class AuthController {
         if(!token) throw new AppError('CODE NOT PROVIDED', 400);
 
         try{
-            console.log("Je suis ici");
             const result = await this.confirm2FA.execute(userId, token);
             if(!result) throw new AppError('TWO FACTOR AUTHENTICATION ACTIVATION FAILED', 500);
 
