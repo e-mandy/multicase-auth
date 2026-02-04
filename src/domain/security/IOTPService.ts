@@ -1,4 +1,4 @@
 export interface IOTPService {
-    generateSecret: (email: string) => {secret: string, qrcode: string},
+    generateSecret: (email: string) => Promise<{secret: string, qrcode: string}>,
     verifyOTPCode: (otp_code: string, secret: string) => boolean
 }

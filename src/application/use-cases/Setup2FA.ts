@@ -16,11 +16,11 @@ export class Setup2FA{
         if(!user) throw new AppError('INVALID CREDENTIALS', 400);
 
         const is2FAActive = await this.userRepository.verify2FAActivate(email);
-        if(is2FAActive) return ;
+        if(is2FAActive) return;
 
-        const secretDatas = this.otpService.generateSecret(email);
+        const secretDatas = await this.otpService.generateSecret(email);
         await this.userRepository.save2FASecret(secretDatas.secret, user.id);
-
+        console.log(secretDatas);
         return secretDatas.qrcode;
     }
 }

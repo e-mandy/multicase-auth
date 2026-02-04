@@ -156,7 +156,7 @@ export class PrismaUserRepository implements IUserRepositories{
 
     async verify2FAActivate(email: string){
         let isActive = null;
-        isActive =  prisma.user.findUnique({
+        isActive =  await prisma.user.findUnique({
             where: {
                 email: email
             },
@@ -164,7 +164,8 @@ export class PrismaUserRepository implements IUserRepositories{
                 twoFactorEnabledAt: true
             }
         });
-        return (isActive === null) ? null : true;
+        console.log(isActive);
+        return (isActive?.twoFactorEnabledAt === null) ? null : true;
     }
 
     async save2FASecret(secret: string, userId: string){
