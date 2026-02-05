@@ -21,7 +21,7 @@ export interface IUserRepositories {
     linkOAuthAccount: (userId: string, data: any) => Promise<void>
     verify2FAActivate: (email: string) => Promise<boolean | null>
     save2FASecret: (secret: string, userId: string) => Promise<void>
-    findSecretByUserId: (userId: string) => Promise<string | null>
+    findSecretByEmail: (userId: string) => Promise<Omit<UserEntity, "password"> | null>
     activateUser2FA: (userId: string) => Promise<void>
     desactivateUser2FA: (userId: string) => Promise<void>
     saveLoginAttempt: (datas: {

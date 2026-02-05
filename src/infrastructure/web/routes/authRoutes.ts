@@ -59,7 +59,7 @@ router.get('/me', authMiddleware(tokenService), (req: Request, res: Response) =>
 // TWO FACTOR AUTHENTICATION
 router.get('/setup', authMiddleware(tokenService), auth.setup2FA);
 router.post('/activate', authMiddleware(tokenService), auth.activate2FA);
-router.post('/verify-otp', authMiddleware(tokenService), auth.verifyOTP);
+router.post('/verify-otp', auth.verifyOTP);
 router.post('/desactivate', authMiddleware(tokenService), auth.desactivate2FA);
 
 // OAUTH ROUTES

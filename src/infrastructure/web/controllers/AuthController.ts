@@ -193,13 +193,12 @@ export class AuthController {
     }
 
     verifyOTP = async (req: Request, res: Response, next: NextFunction) => {
-        const { token } = req.body;
-        const userId = req.user?.userId as string;
+        const { token, email } = req.body;
 
         if(!token) throw new AppError('CODE NOT PROVIDED', 400);
 
         try{
-            const result = await this.codeOTPVerifyUseCase.execute(token, userId);
+            const result = await this.codeOTPVerifyUseCase.execute(token, email);
             if(!result) throw new AppError('OTP VERIFICATION FAILED', 500);
 
             return res.status(200).json(result);

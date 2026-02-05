@@ -203,17 +203,17 @@ export class PrismaUserRepository implements IUserRepositories{
         });
     }
 
-    async findSecretByUserId(userId: string){
+    async findSecretByEmail(email: string){
         const result = await prisma.user.findUnique({
             where: {
-                id: userId
+                email: email
             },
-            select: {
-                twoFactorSecret: true
+            omit: {
+                password: true
             }
         });
 
-        return (!result) ? null : result.twoFactorSecret;
+        return (!result) ? null : result;
     }
 
     async saveLoginAttempt(datas: { userId?: string; email: string; ip: string; userAgent: string; status: "SUCCESS" | "FAILED"; }){
