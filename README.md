@@ -1,0 +1,26 @@
+# MULTICASE AUTHENTICATION
+
+### DESCRIPTON
+Système complet d'authentification web incluant l'authentification simple par email et mot de passe, Oauth et la double authentification.
+
+## FONCTIONNALITÉS
+  - Inscription d'utilisateur
+  - Connexion d'utilisateur sans double facteur
+  - Déconnexion d'utilisateur
+  - Vérification d'email à l'inscription
+  - Activation de la double authentification
+  - Vérification OTP à chaque connexion
+  - Désactivation de la double authentification
+  - Middleware d'authentification
+  - Connexion via Github
+
+## AUTEUR
+  ATOHOUN ANDY (Développeur FullStack)
+
+### CONTRIBUTIONS
+Ce projet est ouvert à toute contributions de développeur pour une optimisation ou un ajout de fonctionnalités utiles.
+
+### POUR LES DÉVELOPPEURS
+
+  - Cloner le projet:
+      git clone 
