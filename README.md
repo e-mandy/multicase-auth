@@ -20,7 +20,19 @@ Système complet d'authentification web incluant l'authentification simple par e
 ### CONTRIBUTIONS
 Ce projet est ouvert à toute contributions de développeur pour une optimisation ou un ajout de fonctionnalités utiles.
 
+
+#### FONCTIONNALITÉS À VENIR
+  - Connexion via Google
+  - Mise en place d'un .env.example
+  - Mise en place d'un elevated token à la place d'un simple token lorsque la double authentification est activée
+
 ### POUR LES DÉVELOPPEURS
 
   - Cloner le projet:
-      git clone 
+
+        git clone git@github.com:e-mandy/multicase-auth.git
+
+  - Installer les dépendances:
+
+        npm install
+
