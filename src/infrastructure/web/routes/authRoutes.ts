@@ -51,7 +51,7 @@ const auth = new AuthController(
 router.post('/register', auth.register);
 router.post('/login', auth.login);
 router.get('/verify-email', auth.emailVerify);
-router.post('/logout', auth.logout);
+router.post('/logout', authMiddleware(tokenService), auth.logout);
 router.get('/me', authMiddleware(tokenService), (req: Request, res: Response) => {
     res.status(200).json(req.user);
 });
