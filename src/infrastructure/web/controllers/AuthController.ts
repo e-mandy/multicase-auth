@@ -201,7 +201,15 @@ export class AuthController {
             const result = await this.codeOTPVerifyUseCase.execute(token, email);
             if(!result) throw new AppError('OTP VERIFICATION FAILED', 500);
 
-            return res.status(200).json(result);
+            res.cookie('refreshToken', result.refresh_token, {
+                sameSite: "lax",
+                httpOnly: true
+            });
+
+            return res.status(200).json({
+                access_token: result.access_token,
+                user: result.user
+            });
         }catch(error){
             next(error);
         }

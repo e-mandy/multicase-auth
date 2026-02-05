@@ -15,6 +15,7 @@ export class CodeOTPVerify{
     }
 
     async execute(token: string, email: string){
+        if(!email) throw new AppError("EMAIL NOT PROVIDED", 400);
         const user2FA = await this.userRepository.findSecretByEmail(email);
         if(!user2FA) throw new AppError('INVAILD CREDENTIALS', 400);
 

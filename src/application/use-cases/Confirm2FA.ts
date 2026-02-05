@@ -12,7 +12,10 @@ export class Confirm2FA{
     }
     
     async execute(userId: string, otpCode: string){
-        const userSecret = await this.userRepository.findSecretByUserId(userId);
+        const user2FA = await this.userRepository.findById(userId);
+        if(!user2FA) throw new AppError("UNAUTHORIZED ACCESS", 401);
+
+        const userSecret = user2FA.twoFactorSecret;
         if(!userSecret) throw new AppError('TWO FACTOR AUTHENTICATION NOT SET UP.', 500);
 
         const isValid = this.otpService.verifyOTPCode(otpCode, userSecret);
