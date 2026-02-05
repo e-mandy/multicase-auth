@@ -16,10 +16,9 @@ export const authMiddleware = (tokenService: ITokenService) => {
             const decoded = tokenService.verifyAccessToken(token);
             if(!decoded) throw new AppError("UNAUTHORIZED ACCESS", 400);
 
-            console.log("Ici bro");
             req.user = decoded as { userId: string };
             next();
-            
+
         }catch(error: any){
             if(error.name == "SECRET KEY MISSED: ACCESS_KEY" || error.name == "SECRET KEY MISSED: REFRESH_KEY:s") return res.status(500).json({
                 message: 'Intern Server secret problem'
