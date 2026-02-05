@@ -25,6 +25,8 @@ Ce projet est ouvert à toute contributions de développeur pour une optimisatio
   - Connexion via Google
   - Mise en place d'un .env.example
   - Mise en place d'un elevated token à la place d'un simple token lorsque la double authentification est activée
+  - Enrichissement du ReadME
+  - Rédaction d'une documentation Swagger
 
 ### POUR LES DÉVELOPPEURS
 
