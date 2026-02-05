@@ -45,7 +45,7 @@ model RefreshToken{
 
 model BlacklistedAccessToken{
   id String @id @default(uuid())
-  jti String @unique
+  jti String @unique @db.VarChar(512)
   expiresAt DateTime
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt

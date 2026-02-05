@@ -11,7 +11,6 @@ export class LogoutUser {
     async execute(refresh_token: string, access_token: string){
         try{
             await this.repository.revokeRefreshToken(refresh_token);
-    
             await this.repository.blacklistAccessToken(access_token);
 
             return true;

@@ -99,13 +99,13 @@ export class AuthController {
         }
     };
 
-    logout = (req: Request, res: Response, next: NextFunction) => {
-        const refresh_token = req.cookies.refreshToken;
-        const access_token = req.headers.authorization;
+    logout = async (req: Request, res: Response, next: NextFunction) => {
+        const refresh_token = req.headers.cookie?.split('=')[1];
+        const access_token = req.headers.authorization?.split(' ')[1];
 
         if(!refresh_token || !access_token) throw new AppError('INVALID TOKEN', 401);
         try{
-            const result = this.logoutUseCase.execute(refresh_token, access_token);
+            const result = await this.logoutUseCase.execute(refresh_token, access_token);
             if(!result) throw new AppError("LOGOUT FAILED", 500);
             
             return res.json({
